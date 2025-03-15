@@ -3,27 +3,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 
-# Chua's Circuit System (Chaotic Circuit Model)
+
 def chua_system(t, state, alpha, beta, a, b):
-    x, y, z = state  # x = Voltage across C1, y = Voltage across C2, z = Inductor current
-    fx = b*x + 0.5*(a-b)*(abs(x+1) - abs(x-1))  # Chua's nonlinear function (defines the diode behavior)
+    x, y, z = state  
+    fx = b*x + 0.5*(a-b)*(abs(x+1) - abs(x-1))  
     
     # Chua's circuit equations
-    dx = alpha * (y - x - fx)  # α relates to conductance (resistor values)
-    dy = x - y + z  # Standard capacitor-inductor interaction
-    dz = -beta * y  # β = C1/C2, ratio of capacitors
+    dx = alpha * (y - x - fx)  
+    dy = x - y + z  
+    dz = -beta * y  
 
     return [dx, dy, dz]
 
-# Function to generate and plot the attractor
+# Function 
 def plot_chua_attractor(alpha, beta, a, b):
-    state0 = [0.2, 0.3, -0.1]  # Initial conditions (voltages and current)
-    t_span = (0, 100)  # Time span for solving the ODE
-    t_eval = np.linspace(*t_span, 10000)  # Time steps for plotting
+    state0 = [0.2, 0.3, -0.1]  
+    t_span = (0, 100)  # Time span 
+    t_eval = np.linspace(*t_span, 10000)  
 
     # Solve ODE
     sol = solve_ivp(chua_system, t_span, state0, args=(alpha, beta, a, b), t_eval=t_eval)
-    x, y, z = sol.y  # Extract solutions (voltages & current)
+    x, y, z = sol.y 
 
     # Plot the chaotic attractor
     fig = plt.figure(figsize=(8, 6))
@@ -35,7 +35,7 @@ def plot_chua_attractor(alpha, beta, a, b):
     ax.set_title(f"Chua's Circuit Attractor (α={alpha}, β={beta}, a={a}, b={b})")
     fig.colorbar(scatter, ax=ax, label="Time")
 
-    st.pyplot(fig)  # Display the plot in Streamlit
+    st.pyplot(fig)  
 
 # Streamlit UI
 st.title("Math 273 Project: Chua's Circuit Attractor Visualization")
@@ -62,7 +62,7 @@ st.write("""
 - **a, b** → Define the nonlinear behavior of **Chua's diode**
 """)
 
-# Create sidebar controls for Chua's Circuit parameters
+
 st.sidebar.header("Adjust Circuit Parameters")
 
 alpha = st.sidebar.slider("α (Conductance-related)", min_value=5.0, max_value=20.0, value=9.0, step=0.1)
